@@ -1,4 +1,4 @@
-# 2D Lid-Driven Cavity Flow — Semi-Implicit FVM Solver with Approximate Factorization
+# Lid-Driven Cavity Flow - Semi-Implicit FVM Solver with Approximate Factorization
 
 ---
 
