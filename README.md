@@ -4,7 +4,7 @@
 
 ## Table of Contents
 
-1. [Problem Statement](#1-problem-statement)
+1. [Abstract](#1-abstract)
 2. [Domain and Boundary Conditions](#2-domain-and-boundary-conditions)
 3. [Governing Equations — Incompressible Navier–Stokes (FVM Form)](#3-governing-equations--incompressible-navierstokes-fvm-form)
 4. [Time Discretisation — Semi-Implicit Scheme](#4-time-discretisation--semi-implicit-scheme)
@@ -22,12 +22,10 @@
 
 ---
 
-## 1. Problem Statement
-
-Solve the **2D incompressible Navier–Stokes equations** in a square lid-driven cavity at higher Reynolds numbers using a **semi-implicit finite volume method**, with the implicit predictor step solved efficiently via **Approximate Factorization (AF)** instead of a direct coupled solve.
-
-This solver extends the semi-explicit lid-driven cavity formulation by treating the diffusion and linearized convection terms implicitly in the predictor step, improving stability at higher $Re$ without the time-step restrictions of a fully explicit scheme.
-
+## 1. Abstract
+ 
+A semi-implicit finite volume solver is developed for the 2D incompressible lid-driven cavity problem at elevated Reynolds numbers ($Re = 2500$), where fully explicit time-stepping becomes prohibitively restrictive. The solver treats diffusion and linearized convection implicitly in the predictor step, but avoids the cost of assembling and inverting a large coupled sparse system at every step by employing **Approximate Factorization (AF)**. By exploiting the directional separability of the structured finite-volume stencil and the triangular block structure of the $u$–$v$ cross-coupling, the implicit solve reduces exactly to four scalar Thomas-algorithm tridiagonal passes per time step — two in the $x$-direction and two in the $y$-direction — with a factorization error of $O(\Delta t^3)$ per step that lies below the truncation floor of the underlying second-order scheme. A pressure Poisson equation with Neumann boundary conditions is solved iteratively via Gauss–Seidel to enforce continuity and recover the corrected velocity field at each time step.
+ 
 ---
 
 ## 2. Domain and Boundary Conditions
