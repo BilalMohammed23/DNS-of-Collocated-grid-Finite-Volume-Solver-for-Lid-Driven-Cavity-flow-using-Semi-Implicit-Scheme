@@ -112,7 +112,7 @@ Expanding the product introduces an extra term $A_x A_y \mathbf{w}$, which coupl
 
 The key structural property that makes AF work here is **triangularity within each directional operator**:
 
-- Within $A_x$: the $u$-row of every neighbour block has **no dependence on $\Delta v$**. The only $u$–$v$ cross-coupling comes from $\partial(uv)/\partial y$, which lives entirely in $A_y$.
+- Within $A_x$: the $u$-row of every neighbour block has **no dependence on $\Delta v$**. The only $u\text{-}v$ cross-coupling comes from $\partial(uv)/\partial y$, which lives entirely in $A_y$.
 - Within $A_y$: the $v$-row has **no dependence on $\Delta u$**. The cross-coupling $\partial(uv)/\partial x$ lives entirely in $A_x$.
 
 Consequently:
