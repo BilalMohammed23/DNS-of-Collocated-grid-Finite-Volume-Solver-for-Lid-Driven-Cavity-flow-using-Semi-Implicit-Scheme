@@ -373,7 +373,7 @@ All results are for $Re = 2500$, $N_x = 64$.
 |:---:|:---:|
 | <img src="Results/u_xcenter_vel_Re2500_Nx64.png" width="400"/> | <img src="Results/v_ycenter_vel_Re2500_Nx64.png" width="400"/> |
 
-> The solver captures the primary recirculation vortex and developing secondary eddies characteristic of $Re = 2500$. The AF method achieves this at a fraction of the cost of a direct coupled solve — four scalar Thomas-algorithm passes per step replace what would otherwise be a reassembled $2N \times 2N$ sparse system solve at every time step.
+> The solver captures the primary recirculation vortex and developing secondary eddies characteristic of $Re = 2500$. The AF method achieves this at a fraction of the cost of a direct coupled solve - reassembled $2N \times 2N$ sparse system solve at every time step.
 
 ---
 
