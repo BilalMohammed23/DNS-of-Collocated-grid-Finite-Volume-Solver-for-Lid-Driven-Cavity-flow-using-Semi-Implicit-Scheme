@@ -261,7 +261,7 @@ Three distinct ghost-cell treatments arise in this solver, each appropriate to t
 |---|---|---|
 | Full velocity ($u^{\ast}$, $u^{n+1}$) | $u_{\text{ghost}} = 2u_{\text{wall}} - u_{\text{interior}}$ | Physical Dirichlet reflection — true quantity, wall value fixed |
 | True delta ($\Delta u$, $\Delta v$) | $\Delta u_{\text{ghost}} = -\Delta u_{\text{interior}}$ | Wall value time-invariant → increment at wall is zero → anti-symmetric |
-| AF intermediate ($\Delta u^{\ast}_{\text{bar}}$, $\Delta v^{\ast}_{\text{bar}}$) | Same delta-type anti-symmetric | $O(\Delta t^2)$ approximation — consistent with factorization error already accepted |
+| AF intermediate ($\Delta \bar{u}^{\ast}$, $\Delta \bar{v}^{\ast}$) | Same delta-type anti-symmetric | $O(\Delta t^2)$ approximation — consistent with factorization error already accepted |
 
 The ghost-cell value is **folded directly into the diagonal entry** of the first/last interior row of each tridiagonal system, eliminating the need to carry ghost cells as explicit unknowns.
 
