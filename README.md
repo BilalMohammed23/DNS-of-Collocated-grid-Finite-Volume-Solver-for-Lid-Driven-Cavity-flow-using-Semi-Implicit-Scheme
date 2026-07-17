@@ -131,11 +131,11 @@ Writing $L_x = -\Delta t \cdot A_x$ and $L_y = -\Delta t \cdot A_y$, the exact s
 
 $$(I - L_x - L_y)\mathbf{w} = \tilde{\mathbf{R}}$$
 
-AF replaces this with the product form, solved via an intermediate field $\mathbf{w}^{*}$:
+AF replaces this with the product form, solved via an intermediate field $\mathbf{w}^{\ast}$:
 
-$$\text{Sweep 1: } (I - L_x)\mathbf{w}^{*} = \tilde{\mathbf{R}}$$
+$$\text{Sweep 1: } (I - L_x)\mathbf{w}^{\ast} = \tilde{\mathbf{R}}$$
 
-$$\text{Sweep 2: } (I - L_y)\mathbf{w} = \mathbf{w}^{*}$$
+$$\text{Sweep 2: } (I - L_y)\mathbf{w} = \mathbf{w}^{\ast}$$
 
 The error introduced is:
 
@@ -175,7 +175,7 @@ Sweep 2 — y-direction (one tridiagonal per column):
             RHS: RHS_final.m  (Δu*_bar minus Δv* coupling terms gp, gs, gn)
 ```
 
-**Result:** $\Delta u^{*} = \Delta u$ predicted increment, $\Delta v^{*} = \Delta v$ predicted increment.
+**Result:** $\Delta u^{\ast} = \Delta u$ predicted increment, $\Delta v^{\ast} = \Delta v$ predicted increment.
 
 At no point is a $2\times2$-block tridiagonal, nor the full $2N \times 2N$ matrix, assembled or solved.
 
@@ -201,7 +201,7 @@ $$a'_p = \Delta t \left(\frac{2\gamma}{\Delta x^2} + \frac{u_{f,e} - u_{f,w}}{2\
 
 $$a'_w = \Delta t \left(-\frac{\gamma}{\Delta x^2} - \frac{u_{f,w}}{2\Delta x}\right), \quad a'_e = \Delta t \left(-\frac{\gamma}{\Delta x^2} + \frac{u_{f,e}}{2\Delta x}\right)$$
 
-Cross-coupling coefficients $h_p$, $h_w$, $h_e$ carry the $\Delta u^{*}_{\text{bar}}$ contribution from the $v$-equation RHS.
+Cross-coupling coefficients $h_p$, $h_w$, $h_e$ carry the $\Delta u^{\ast}_{\text{bar}}$ contribution from the $v$-equation RHS.
 
 ### y-direction coefficients for $v$ (`coeff_tb_v.m`)
 
@@ -217,33 +217,33 @@ $$b_p = \Delta t \left(\frac{2\gamma}{\Delta y^2} + \frac{v_{f,n} - v_{f,s}}{2\D
 
 $$b_n = \Delta t \left(-\frac{\gamma}{\Delta y^2} + \frac{v_{f,n}}{2\Delta y}\right), \quad b_s = \Delta t \left(-\frac{\gamma}{\Delta y^2} - \frac{v_{f,s}}{2\Delta y}\right)$$
 
-Cross-coupling coefficients $g_p$, $g_s$, $g_n$ carry the $\Delta v^{*}$ contribution from the $u$-equation RHS (`RHS_final.m`).
+Cross-coupling coefficients $g_p$, $g_s$, $g_n$ carry the $\Delta v^{\ast}$ contribution from the $u$-equation RHS (`RHS_final.m`).
 
 ---
 
 ## 10. Pressure Poisson Equation and Velocity Correction
 
-After the four AF sweeps yield the predicted increments $\Delta u^{*}$, $\Delta v^{*}$, the predicted velocity field is:
+After the four AF sweeps yield the predicted increments $\Delta u^{\ast}$, $\Delta v^{\ast}$, the predicted velocity field is:
 
-$$u^{*} = u^n + \Delta u^{*}, \quad v^{*} = v^n + \Delta v^{*}$$
+$$u^{\ast} = u^n + \Delta u^{\ast}, \quad v^{\ast} = v^n + \Delta v^{\ast}$$
 
 This predicted field does not satisfy continuity. A pressure correction $\delta P$ is found by solving the **pressure Poisson equation** whose source term is the divergence of the predicted face velocities:
 
-$$\text{RHS}_P(i,j) = \left(u^{*}_{f,e} - u^{*}_{f,w}\right)\Delta y + \left(v^{*}_{f,n} - v^{*}_{f,s}\right)\Delta x$$
+$$\text{RHS}_P(i,j) = \left(u^{\ast}_{f,e} - u^{\ast}_{f,w}\right)\Delta y + \left(v^{\ast}_{f,n} - v^{\ast}_{f,s}\right)\Delta x$$
 
 The Poisson equation is solved iteratively using **Gauss–Seidel** with Neumann BCs ($\partial P / \partial n = 0$ on all walls) and a pressure gauge fix at one corner node.
 
 **Face velocity correction:**
 
-$$u_{f,e}^{n+1} = u^{*}_{f,e} - \frac{\delta P_{i,j+1} - \delta P_{i,j}}{\Delta x}$$
+$$u_{f,e}^{n+1} = u^{\ast}_{f,e} - \frac{\delta P_{i,j+1} - \delta P_{i,j}}{\Delta x}$$
 
-$$v_{f,n}^{n+1} = v^{*}_{f,n} - \frac{\delta P_{i,j} - \delta P_{i+1,j}}{\Delta y}$$
+$$v_{f,n}^{n+1} = v^{\ast}_{f,n} - \frac{\delta P_{i,j} - \delta P_{i+1,j}}{\Delta y}$$
 
 **Cell-centre velocity correction** (2nd-order central difference):
 
-$$u^{n+1}_{i,j} = u^{*}_{i,j} - \frac{\delta P_{i,j+1} - \delta P_{i,j-1}}{2\Delta x}$$
+$$u^{n+1}_{i,j} = u^{\ast}_{i,j} - \frac{\delta P_{i,j+1} - \delta P_{i,j-1}}{2\Delta x}$$
 
-$$v^{n+1}_{i,j} = v^{*}_{i,j} - \frac{\delta P_{i-1,j} - \delta P_{i+1,j}}{2\Delta y}$$
+$$v^{n+1}_{i,j} = v^{\ast}_{i,j} - \frac{\delta P_{i-1,j} - \delta P_{i+1,j}}{2\Delta y}$$
 
 **Pressure update:**
 
@@ -259,9 +259,9 @@ Three distinct ghost-cell treatments arise in this solver, each appropriate to t
 
 | Quantity type | Ghost cell relation | Reason |
 |---|---|---|
-| Full velocity ($u^{*}$, $u^{n+1}$) | $u_{\text{ghost}} = 2u_{\text{wall}} - u_{\text{interior}}$ | Physical Dirichlet reflection — true quantity, wall value fixed |
+| Full velocity ($u^{\ast}$, $u^{n+1}$) | $u_{\text{ghost}} = 2u_{\text{wall}} - u_{\text{interior}}$ | Physical Dirichlet reflection — true quantity, wall value fixed |
 | True delta ($\Delta u$, $\Delta v$) | $\Delta u_{\text{ghost}} = -\Delta u_{\text{interior}}$ | Wall value time-invariant → increment at wall is zero → anti-symmetric |
-| AF intermediate ($\Delta u^{*}_{\text{bar}}$, $\Delta v^{*}_{\text{bar}}$) | Same delta-type anti-symmetric | $O(\Delta t^2)$ approximation — consistent with factorization error already accepted |
+| AF intermediate ($\Delta u^{\ast}_{\text{bar}}$, $\Delta v^{\ast}_{\text{bar}}$) | Same delta-type anti-symmetric | $O(\Delta t^2)$ approximation — consistent with factorization error already accepted |
 
 The ghost-cell value is **folded directly into the diagonal entry** of the first/last interior row of each tridiagonal system, eliminating the need to carry ghost cells as explicit unknowns.
 
@@ -288,17 +288,17 @@ $$\Delta t = \text{CFL} \cdot \min(\Delta t_{\text{adv}},\ \Delta t_{\text{diff}
 | `main_code_FVM.m` | Driver: grid, IC, time loop, AF sweeps, pressure correction, plots | — |
 | `bound_cond.m` | Ghost cell BCs for all cell-centre and face arrays | `main_code_FVM.m` + AF functions |
 | `interpl_faces.m` | Linear interpolation of cell-centre values to face centres | `main_code_FVM.m` |
-| `delustarbar_fnc_tridiag.m` | Sweep 1a: x-tridiagonal for $\Delta u^{*}_{\text{bar}}$ | `main_code_FVM.m` |
-| `delvstarbar_fnc_tridiag.m` | Sweep 1b: x-tridiagonal for $\Delta v^{*}_{\text{bar}}$ (uses $\Delta u^{*}_{\text{bar}}$) | `main_code_FVM.m` |
-| `delvstar_fnc_tridiag.m` | Sweep 2a: y-tridiagonal for $\Delta v^{*}$ | `main_code_FVM.m` |
-| `delustar_fnc_tridiag.m` | Sweep 2b: y-tridiagonal for $\Delta u^{*}$ (uses $\Delta v^{*}$) | `main_code_FVM.m` |
+| `delustarbar_fnc_tridiag.m` | Sweep 1a: x-tridiagonal for $\Delta u^{\ast}_{\text{bar}}$ | `main_code_FVM.m` |
+| `delvstarbar_fnc_tridiag.m` | Sweep 1b: x-tridiagonal for $\Delta v^{\ast}_{\text{bar}}$ (uses $\Delta u^{\ast}_{\text{bar}}$) | `main_code_FVM.m` |
+| `delvstar_fnc_tridiag.m` | Sweep 2a: y-tridiagonal for $\Delta v^{\ast}$ | `main_code_FVM.m` |
+| `delustar_fnc_tridiag.m` | Sweep 2b: y-tridiagonal for $\Delta u^{\ast}$ (uses $\Delta v^{\ast}$) | `main_code_FVM.m` |
 | `coeff_sides_u.m` | x-direction coefficients $a_p$, $a_w$, $a_e$ for $u$ tridiagonal | `delustarbar_fnc_tridiag.m` |
 | `coeff_sides_v.m` | x-direction coefficients $a'_p$, $a'_w$, $a'_e$, $h_p$, $h_w$, $h_e$ for $v$ tridiagonal | `delvstarbar_fnc_tridiag.m` |
 | `coeff_tb_v.m` | y-direction coefficients $b'_p$, $b'_n$, $b'_s$ for $v$ tridiagonal | `delvstar_fnc_tridiag.m` |
 | `coeff_tb_u.m` | y-direction coefficients $b_p$, $b_s$, $b_n$, $g_p$, $g_s$, $g_n$ for $u$ tridiagonal | `delustar_fnc_tridiag.m` |
 | `RHS_u_mom.m` | Explicit RHS: convection + pressure + diffusion for $u$ | `delustarbar_fnc_tridiag.m` |
-| `RHS_v_mom.m` | Explicit RHS: convection + pressure + diffusion for $v$ (+ $\Delta u^{*}_{\text{bar}}$ coupling) | `delvstarbar_fnc_tridiag.m` |
-| `RHS_final.m` | Final RHS for $\Delta u^{*}$ sweep: $\Delta u^{*}_{\text{bar}}$ minus $\Delta v^{*}$ coupling | `delustar_fnc_tridiag.m` |
+| `RHS_v_mom.m` | Explicit RHS: convection + pressure + diffusion for $v$ (+ $\Delta u^{\ast}_{\text{bar}}$ coupling) | `delvstarbar_fnc_tridiag.m` |
+| `RHS_final.m` | Final RHS for $\Delta u^{\ast}$ sweep: $\Delta u^{\ast}_{\text{bar}}$ minus $\Delta v^{\ast}$ coupling | `delustar_fnc_tridiag.m` |
 | `pressure_poisson_GS.m` | Gauss–Seidel solve for pressure correction $\delta P$ | `main_code_FVM.m` |
 | `delt_delP_faces.m` | Face-level pressure gradients from cell-centre $\delta P$ | `main_code_FVM.m` |
 | `dt_lid_driven_cavity.m` | Adaptive CFL + diffusive time step | `main_code_FVM.m` |
