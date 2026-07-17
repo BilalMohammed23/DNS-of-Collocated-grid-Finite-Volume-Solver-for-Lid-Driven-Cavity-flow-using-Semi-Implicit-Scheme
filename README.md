@@ -377,11 +377,11 @@ All results are for $Re = 2500$, $N_x = 64$.
 
 ---
 
-### Reference
+### Benchmark
 
-> Douglas, J. & Gunn, J. E. (1964). *A general formulation of alternating direction methods.* Numerische Mathematik, 6(1), 428–453.
->
-> Ghia, U., Ghia, K. N., & Shin, C. T. (1982). *High-Re solutions for incompressible flow using the Navier-Stokes equations and a multigrid method.* Journal of Computational Physics, 48(3), 387–411.
+Check out the benchmark data for Re=2500. You can see the exact numerical data that we have produced with our method.
+
+> *https://www.acenumerics.com/the-benchmarks.html*
 
 ---
 
