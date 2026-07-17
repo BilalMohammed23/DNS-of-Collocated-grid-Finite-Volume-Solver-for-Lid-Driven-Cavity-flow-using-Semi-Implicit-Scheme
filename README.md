@@ -280,14 +280,14 @@ $$\Delta t = \text{CFL} \cdot \min(\Delta t_{\text{adv}},\ \Delta t_{\text{diff}
 ---
 
 ## 13. File Structure
-
+ 
 | File | Role | Called by |
 |---|---|---|
 | `main_code_FVM.m` | Driver: grid, IC, time loop, AF sweeps, pressure correction, plots | — |
 | `bound_cond.m` | Ghost cell BCs for all cell-centre and face arrays | `main_code_FVM.m` + AF functions |
 | `interpl_faces.m` | Linear interpolation of cell-centre values to face centres | `main_code_FVM.m` |
-| `delustarbar_fnc_tridiag.m` | Sweep 1a: x-tridiagonal for $\Delta u^{\ast}_{\text{bar}}$ | `main_code_FVM.m` |
-| `delvstarbar_fnc_tridiag.m` | Sweep 1b: x-tridiagonal for $\Delta v^{\ast}_{\text{bar}}$ (uses $\Delta u^{\ast}_{\text{bar}}$) | `main_code_FVM.m` |
+| `delustarbar_fnc_tridiag.m` | Sweep 1a: x-tridiagonal for $\Delta \bar{u}^{\ast}$ | `main_code_FVM.m` |
+| `delvstarbar_fnc_tridiag.m` | Sweep 1b: x-tridiagonal for $\Delta \bar{v}^{\ast}$ (uses $\Delta \bar{u}^{\ast}$) | `main_code_FVM.m` |
 | `delvstar_fnc_tridiag.m` | Sweep 2a: y-tridiagonal for $\Delta v^{\ast}$ | `main_code_FVM.m` |
 | `delustar_fnc_tridiag.m` | Sweep 2b: y-tridiagonal for $\Delta u^{\ast}$ (uses $\Delta v^{\ast}$) | `main_code_FVM.m` |
 | `coeff_sides_u.m` | x-direction coefficients $a_p$, $a_w$, $a_e$ for $u$ tridiagonal | `delustarbar_fnc_tridiag.m` |
@@ -295,12 +295,12 @@ $$\Delta t = \text{CFL} \cdot \min(\Delta t_{\text{adv}},\ \Delta t_{\text{diff}
 | `coeff_tb_v.m` | y-direction coefficients $b'_p$, $b'_n$, $b'_s$ for $v$ tridiagonal | `delvstar_fnc_tridiag.m` |
 | `coeff_tb_u.m` | y-direction coefficients $b_p$, $b_s$, $b_n$, $g_p$, $g_s$, $g_n$ for $u$ tridiagonal | `delustar_fnc_tridiag.m` |
 | `RHS_u_mom.m` | Explicit RHS: convection + pressure + diffusion for $u$ | `delustarbar_fnc_tridiag.m` |
-| `RHS_v_mom.m` | Explicit RHS: convection + pressure + diffusion for $v$ (+ $\Delta u^{\ast}_{\text{bar}}$ coupling) | `delvstarbar_fnc_tridiag.m` |
-| `RHS_final.m` | Final RHS for $\Delta u^{\ast}$ sweep: $\Delta u^{\ast}_{\text{bar}}$ minus $\Delta v^{\ast}$ coupling | `delustar_fnc_tridiag.m` |
+| `RHS_v_mom.m` | Explicit RHS: convection + pressure + diffusion for $v$ (+ $\Delta \bar{u}^{\ast}$ coupling) | `delvstarbar_fnc_tridiag.m` |
+| `RHS_final.m` | Final RHS for $\Delta u^{\ast}$ sweep: $\Delta \bar{u}^{\ast}$ minus $\Delta v^{\ast}$ coupling | `delustar_fnc_tridiag.m` |
 | `pressure_poisson_GS.m` | Gauss–Seidel solve for pressure correction $\delta P$ | `main_code_FVM.m` |
 | `delt_delP_faces.m` | Face-level pressure gradients from cell-centre $\delta P$ | `main_code_FVM.m` |
 | `dt_lid_driven_cavity.m` | Adaptive CFL + diffusive time step | `main_code_FVM.m` |
-
+ 
 ### Call Graph
 
 ```
